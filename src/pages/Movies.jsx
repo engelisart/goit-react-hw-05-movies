@@ -1,24 +1,28 @@
 import { getMovies } from 'API/api';
 import { SearchBar } from 'components/SearchBar/SearchBar';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { List } from './Movies.styled';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import { List } from '../components/Movies/Movies.styled';
 
 const Movies = () => {
-  const [movie, setMovie] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
   const [movies, setMovies] = useState([]);
+  const location = useLocation();
 
   useEffect(() => {
+    const movie = searchParams.get('query') || '';
+
     const loadMovies = async () => {
       const data = await getMovies(movie);
       setMovies(data.results);
     };
 
     loadMovies();
-  }, [movie]);
+  }, [searchParams]);
 
   const handleChangeMovie = text => {
-    setMovie(text);
+    //setMovie(text);
+    setSearchParams({ query: text });
   };
 
   return (
@@ -27,7 +31,9 @@ const Movies = () => {
       <ul>
         {movies.map(movie => (
           <List key={movie.id}>
-            <Link to={`/movies/${movie.id}`}>{movie.title || movie.name}</Link>
+            <Link to={`/movies/${movie.id}`} state={location}>
+              {movie.title || movie.name}
+            </Link>
           </List>
         ))}
       </ul>

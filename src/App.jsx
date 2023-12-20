@@ -2,15 +2,13 @@ import { Layout } from 'components/Layout/Layout';
 import React, { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-const Home = lazy(() => import('./components/Home/Home'));
+const Home = lazy(() => import('./pages/Home'));
 
 const Cast = lazy(() => import('./components/Cast/Cast'));
 const Reviews = lazy(() => import('./components/Reviews/Reviews'));
-const Movies = lazy(() => import('./components/Movies/Movies'));
+const Movies = lazy(() => import('./pages/Movies'));
 
-const MovieDetails = lazy(() =>
-  import('./components/MovieDetails/MovieDetails')
-);
+const MovieDetails = lazy(() => import('./pages/MovieDetails'));
 export const App = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -22,8 +20,8 @@ export const App = () => {
             <Route path="cast" element={<Cast />}></Route>
             <Route path="reviews" element={<Reviews />}></Route>
           </Route>
+          <Route path="*" element={<Home />} />
         </Route>
-        <Route path="*" element={<h1>404</h1>} />
       </Routes>
     </Suspense>
   );

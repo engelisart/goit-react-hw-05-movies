@@ -1,4 +1,4 @@
-import { Outlet, useNavigate, useParams } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { getMoviesDetails } from 'API/api';
 import { useEffect, useState } from 'react';
 import {
@@ -9,13 +9,15 @@ import {
   StInformationTitle,
   StNavLink,
   TitleText,
-} from './MovieDetails.styled';
+} from '../components/MovieDetails/MovieDetails.styled';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
   const [details, setDetails] = useState();
   const navigate = useNavigate();
+  const location = useLocation();
 
+  console.log(location);
   useEffect(() => {
     const loadMovieDetails = async () => {
       const data = await getMoviesDetails(movieId);
@@ -30,7 +32,7 @@ const MovieDetails = () => {
       <Movie>
         <BtnGoBack
           onClick={() => {
-            navigate(-1);
+            navigate(location.state ?? '/movies');
           }}
         >
           Go Back
@@ -56,8 +58,12 @@ const MovieDetails = () => {
         </ImgTitle>
         <Information>
           <StInformationTitle>Additional information</StInformationTitle>
-          <StNavLink to="cast">Cast</StNavLink>
-          <StNavLink to="reviews">Reviews</StNavLink>
+          <StNavLink to="cast" state={location.state}>
+            Cast
+          </StNavLink>
+          <StNavLink to="reviews" state={location.state}>
+            Reviews
+          </StNavLink>
         </Information>
 
         <Outlet />
